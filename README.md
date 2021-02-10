@@ -12,22 +12,22 @@ const Leds = require('@mathquis/node-led-animator')
 const NUM_LEDS = 16
 
 const render = leds => {
-	const buffer = leds.toBuffer()
-	console.log(buffer)
+    const buffer = leds.toBuffer()
+    console.log(buffer)
 }
 
 const leds = new Leds({
-	leds: NUM_LEDS,
-	startAt: 0,
-	onRender: render
+    leds: NUM_LEDS,
+    startAt: 0,
+    onRender: render
 })
 
 // Create some colors
-const orange	= leds.createColor(255, 128, 0, 255)
-const red		= leds.createColor(255, 0, 0)
-const green		= leds.createColor(0, 255, 0)
-const blue		= leds.createColor(49, 196, 243)
-const darkblue	= leds.createColor(35, 61, 83)
+const orange    = leds.createColor(255, 128, 0, 255)
+const red       = leds.createColor(255, 0, 0)
+const green     = leds.createColor(0, 255, 0)
+const blue      = leds.createColor(49, 196, 243)
+const darkblue  = leds.createColor(35, 61, 83)
 
 // Use these colors
 leds.setColors([orange, blue, green, orange, red])
@@ -37,7 +37,7 @@ const step = 1
 const speed = 60 // ms per frame
 const iterations = 3
 const cb = () => {
-	console.log('finished')
+    console.log('finished')
 }
 leds.rotate(step, speed, iterations, cb)
 
