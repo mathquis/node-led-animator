@@ -10,7 +10,6 @@
 const Leds = require('@mathquis/node-led-animator')
 
 const NUM_LEDS = 16
-const LED_SIZE = 30
 
 const render = leds => {
 	const buffer = leds.toBuffer()
