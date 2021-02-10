@@ -1,5 +1,5 @@
 {
-  "name": "led-animator",
+  "name": "@mathquis/node-led-animator",
   "version": "1.0.0",
   "description": "LED patterns animator",
   "main": "index.js",
