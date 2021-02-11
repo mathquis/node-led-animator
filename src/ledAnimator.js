@@ -6,7 +6,6 @@ class LedAnimator {
 		this.colors		= []
 		this.timeout	= null
 		this.buffer		= new Uint32Array(this.numLeds)
-		this.reset()
 	}
 
 	get numLeds() {
@@ -54,10 +53,13 @@ class LedAnimator {
 	}
 
 	off() {
+		this.stopAnimation()
+		const colors = this.toColors()
 		this.colors.forEach(color => {
 			color.a = 0
 		})
 		this.render()
+		this.colors = colors
 	}
 
 	sleep() {
@@ -113,7 +115,7 @@ class LedAnimator {
 		if ( colors instanceof Color ) {
 			colors = [colors]
 		}
-		const ledsPerColor = Math.floor(this.numLeds / colors.length)
+		const ledsPerColor = Math.ceil(this.numLeds / colors.length)
 		for ( let i = 0 ; i < this.numLeds ; i++ ) {
 			const mappedIndex = Math.min( Math.floor(i / ledsPerColor), colors.length - 1 )
 			this.setColor(i, colors[mappedIndex])
@@ -491,7 +493,7 @@ class LedAnimator {
 		this.endCallback = callback
 		const animate = () => {
 			if ( func() ) {
-				this._timeout = setTimeout(animate, speed)
+				this.timeout = setTimeout(animate, speed)
 			} else {
 				this.stopAnimation()
 			}
@@ -510,9 +512,12 @@ class LedAnimator {
 	stopAnimation() {
 		if ( this.timeout ) {
 			clearTimeout(this.timeout)
-			this.notifyEnd(this.endCallback)
 			this.timeout = null
+		}
+		if ( this.endCallback ) {
+			const callback = this.endCallback
 			this.endCallback = null
+			this.notifyEnd(callback)
 		}
 	}
 

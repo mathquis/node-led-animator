@@ -1,9 +1,9 @@
 class Color {
-	constructor(r, g, b, a) {
+	constructor(r, g, b, a = 255) {
 		this.r = Math.max(0, Math.min(255, r || 0))
 		this.g = Math.max(0, Math.min(255, g || 0))
 		this.b = Math.max(0, Math.min(255, b || 0))
-		this.a = Math.max(0, Math.min(255, a || 255))
+		this.a = Math.max(0, Math.min(255, a))
 	}
 
 	setBrightness(brightness) {
