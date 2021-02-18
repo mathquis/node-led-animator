@@ -1,7 +1,9 @@
-const Color = require('./color')
+const EventEmitter	= require('events')
+const Color			= require('./color')
 
-class LedAnimator {
+class LedAnimator extends EventEmitter {
 	constructor(options) {
+		super()
 		this.options	= options || {}
 		this.colors		= []
 		this.timeout	= null
@@ -17,9 +19,7 @@ class LedAnimator {
 	}
 
 	render(colors) {
-		if ( this.options.onRender ) {
-			this.options.onRender(this)
-		}
+		this.emit('render')
 	}
 
 	toBuffer(startAt) {
@@ -69,27 +69,19 @@ class LedAnimator {
 	// Notifications
 
 	notifyStart() {
-		if ( this.options.onStart ) {
-			this.options.onStart(this)
-		}
+		this.emit('start')
 	}
 
 	notifyIteration(iteration) {
-		if ( this.options.onIteration ) {
-			this.options.onIteration(this, iteration)
-		}
+		this.emit('iteration', iteration)
 	}
 
 	notifyHalted() {
-		if ( this.options.onHalted ) {
-			this.options.onHalted(this)
-		}
+		this.emit('halter')
 	}
 
 	notifyEnd(callback) {
-		if ( this.options.onEnd ) {
-			this.options.onEnd(this)
-		}
+		this.emit('end')
 		if ( callback ) callback(this)
 	}
 
