@@ -1,6 +1,6 @@
 {
   "name": "@mathquis/node-led-animator",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "LED patterns animator",
   "main": "index.js",
   "scripts": {
