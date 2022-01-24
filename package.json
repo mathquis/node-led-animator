@@ -4,7 +4,8 @@
   "description": "LED patterns animator",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "browserify": "browserify -r \"./index.js:led-patterns\" > build.js"
   },
   "repository": {
     "type": "git",
@@ -20,5 +21,8 @@
     "animation"
   ],
   "author": "Mathieu \"Fastjack\" Quisefit",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "browserify": "^17.0.0"
+  }
 }

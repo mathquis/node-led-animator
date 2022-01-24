@@ -54,12 +54,10 @@ class LedAnimator extends EventEmitter {
 
 	off() {
 		this.stopAnimation()
-		const colors = this.toColors()
 		this.colors.forEach(color => {
-			color.a = 0
+			color.setBrightness(0)
 		})
 		this.render()
-		this.colors = colors
 	}
 
 	sleep() {
@@ -77,12 +75,11 @@ class LedAnimator extends EventEmitter {
 	}
 
 	notifyHalted() {
-		this.emit('halter')
+		this.emit('halted')
 	}
 
 	notifyEnd(callback) {
 		this.emit('end')
-		if ( callback ) callback(this)
 	}
 
 	// Image manipulations
@@ -315,6 +312,9 @@ class LedAnimator extends EventEmitter {
 					action.brightness = 255
 					action.speed = Math.random() * 2 - 1
 				}
+				if (action.speed === 0) {
+					action.speed = 0.5;
+				}
 				color.setBrightness(action.brightness)
 			})
 			this.render()
@@ -381,9 +381,8 @@ class LedAnimator extends EventEmitter {
 		const leadingLed = Math.ceil(progress * this.numLeds)
 		const brightnessAdjustments = Array(this.numLeds).fill(0)
 		for ( let g = 0 ; g <= leadingLed ; g++ ) {
-			brightnessAdjustments[g] = !!gradient ? ( g ) / ( leadingLed + 1 ) : 1
+			brightnessAdjustments[g] = !!gradient ? g / leadingLed : 1
 		}
-
 		let led = 0
 		const anim = () => {
 			const brightness = brightnesses[led] * brightnessAdjustments[led]
@@ -503,13 +502,14 @@ class LedAnimator extends EventEmitter {
 
 	stopAnimation() {
 		if ( this.timeout ) {
+			this.notifyEnd()
 			clearTimeout(this.timeout)
 			this.timeout = null
 		}
 		if ( this.endCallback ) {
 			const callback = this.endCallback
 			this.endCallback = null
-			this.notifyEnd(callback)
+			if ( callback ) callback(this)
 		}
 	}
 

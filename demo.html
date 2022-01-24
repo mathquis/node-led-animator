@@ -1,0 +1,75 @@
+<html style="min-height: 100%;">
+	<head></head>
+	<body bgcolor="black" style="min-height: 100%;">
+		<table width="100%" height="100%">
+			<tr>
+				<td align="center">
+					<canvas id="renderer" width="300" height="300"></canvas>
+				</td>
+			</tr>
+		</table>
+		<script type="text/javascript" src="build.js"></script>
+		<script type="text/javascript">
+			const LedPatterns = require('led-patterns');
+
+			const NUM_LEDS			= 16;
+			const DEGREE_PER_COLOR	= 360 / NUM_LEDS;
+			const RAD_PER_COLOR		= DEGREE_PER_COLOR * ( Math.PI / 180 );
+			const CANVAS			= document.getElementById('renderer');
+			const CENTER_X			= CANVAS.width / 2;
+			const CENTER_Y			= CANVAS.height / 2;
+			const LED_RADIUS        = 20;
+			const CONTEXT			= CANVAS.getContext('2d');
+
+			const animator = new LedPatterns({
+				leds: NUM_LEDS
+			});
+
+			const render = () => {
+				CONTEXT.clearRect(0, 0, CANVAS.width, CANVAS.height);
+				const colors = animator.toColors();
+				colors.forEach((color, index) => {
+					const t = index * RAD_PER_COLOR - Math.PI / 2;
+					const x = (CENTER_X - LED_RADIUS) * Math.cos(t) + CENTER_X;
+					const y = (CENTER_Y - LED_RADIUS) * Math.sin(t) + CENTER_Y;
+					CONTEXT.beginPath();
+					CONTEXT.arc(x, y, LED_RADIUS, 0, 2 * Math.PI, false);
+					CONTEXT.fillStyle = `rgba(${color.r}, ${color.g}, ${color.b}, ${color.a / 255})`;
+					CONTEXT.fill();
+				});
+			};
+
+			animator.on('render', render);
+			animator.on('iteration', i => console.log('Iteration:', i));
+			animator.on('end', () => console.log('End'));
+
+			const BLUE		= animator.createColor(0, 0, 255, 255);
+			const GREEN		= animator.createColor(0, 255, 0, 255);
+			const YELLOW	= animator.createColor(255, 255, 0, 255);
+			const ORANGE	= animator.createColor(255, 120, 0, 255);
+			const CYAN		= animator.createColor(0, 120, 255, 255);
+			const RED		= animator.createColor(255, 0, 0, 255);
+
+			// animator.setGradient(BLUE, GREEN);
+			animator.setGradientLoop(ORANGE, GREEN);
+			// animator.setRainbowColors(255);
+			// animator.render();
+			// animator.off();
+			// animator.render();
+			// animator.breath(0, 255, 30, 60, 3);
+			// animator.rotate(1, 60, 3, () => {
+			// 	animator.fadeOut(0, 20, 60)
+			// });
+			// animator.chaos(60);
+			// animator.lavalamp(30, 60);
+			// animator.pingpong(1, 5, 1, 1, 60, 3);
+			animator.progress(0.67, true, 60);
+			// animator.wipe(1, 60, 5)
+			// animator.fadeIn(255, 20, 60)
+			// animator.fadeOut(0, 20, 60)
+
+			console.log('Started')
+
+		</script>
+	</body>
+</html>
