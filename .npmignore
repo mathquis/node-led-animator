@@ -1,4 +1,6 @@
 node_modules
 README.md
 .gitignore
+build.js
 test.js
+demo.html
