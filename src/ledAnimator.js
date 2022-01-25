@@ -437,12 +437,10 @@ class LedAnimator extends EventEmitter {
 		return this.startAnimation(anim, speed, callback)
 	}
 
-	// TODO:
-	expand(step, speed, iterations, callback) {
+	expand(step, speed, callback) {
 		step || (step = 1)
-		iterations || (iterations = 0)
 		speed || (speed = 60)
-		let count = 0, wipe = 0
+		let expand = 0
 
 		const brightnesses = this.colors.map(color => {
 			const a = color.a
@@ -451,26 +449,21 @@ class LedAnimator extends EventEmitter {
 		})
 
 		const anim = () => {
-			let brightness = 0
-			if ( wipe < this.numLeds ) {
-				brightness = brightnesses[wipe]
-			}
-			for ( let i = 0 ; i < step ; i++ ) {
-				const position = wipe % this.numLeds + i
+			for ( let i = 0 ; i < expand ; i++ ) {
+				const rightIndex = i % this.numLeds
+				const leftIndex = ( this.numLeds - i ) % this.numLeds
 				this
-					.getColor(position)
-					.setBrightness(brightness)
+					.getColor(rightIndex)
+					.setBrightness(brightnesses[rightIndex])
+				this
+					.getColor(leftIndex)
+					.setBrightness(brightnesses[leftIndex])
 			}
-			wipe += step
 			this.render()
-			if ( wipe > this.numLeds * 2 ) {
-				wipe = 0
-				count++
-				this.notifyIteration(count)
-				if ( iterations > 0 && count >= iterations ) {
-					return false
-				}
+			if ( expand > this.numLeds / 2 ) {
+				return false
 			}
+			expand += step
 			return true
 		}
 
