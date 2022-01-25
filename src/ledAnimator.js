@@ -210,7 +210,7 @@ class LedAnimator extends EventEmitter {
 		return this.startAnimation(anim, speed, callback)
 	}
 
-	breath(minBrightness, maxBrightness, step, speed, iterations, callback) {
+	breath(minBrightness, maxBrightness, initialBrightness, step, speed, iterations, callback) {
 		// Configuration
 		step || (step = 10)
 		minBrightness || (minBrightness = 0)
@@ -220,7 +220,7 @@ class LedAnimator extends EventEmitter {
 
 		const brightnesses = this._getBrightnesses()
 		let currentStep = step
-		let brightness = minBrightness, count = 0
+		let brightness = initialBrightness, count = 0
 		const anim = () => {
 			this.colors.forEach(color => color.setBrightness(brightness))
 			this.render()

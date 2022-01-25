@@ -63,7 +63,9 @@
 			// animator.chaos(60);
 			// animator.lavalamp(30, 60);
 			// animator.pingpong(1, 5, 1, 1, 60, 3);
-			animator.expand(2, 60);
+			animator.expand(2, 60, () => {
+            	animator.breath(50, 150, 150, 10, 60)
+			});
 			// animator.wipe(1, 60, 5)
 			// animator.fadeIn(255, 20, 60)
 			// animator.fadeOut(0, 20, 60)
