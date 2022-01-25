@@ -244,7 +244,7 @@ class LedAnimator extends EventEmitter {
 	}
 
 	blink(speed, iterations, callback) {
-		return this.breath(0, 255, 255, speed, iterations, callback)
+		return this.breath(0, 255, 255, 255, speed, iterations, callback)
 	}
 
 	rotate(step, speed, iterations, callback) {
