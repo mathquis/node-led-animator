@@ -473,36 +473,33 @@ class LedAnimator extends EventEmitter {
 	// Animation management
 
 	startAnimation(func, speed, callback) {
-		this.stopAnimation()
-		this.endCallback = callback
+		this.stopAnimation(true)
+		this.endCallback = (canceled) => {
+			if (callback) {
+				callback(canceled)
+			}
+		}
 		const animate = () => {
 			if ( func() ) {
 				this.timeout = setTimeout(animate, speed)
 			} else {
-				this.stopAnimation()
-			}
-		}
-		const animation = {
-			stop: () => {
-				this.notifyHalted()
-				this.stopAnimation()
+				this.stopAnimation(false)
 			}
 		}
 		this.notifyStart()
 		animate()
-		return animation
 	}
 
-	stopAnimation() {
+	stopAnimation(canceled) {
 		if ( this.timeout ) {
-			this.notifyEnd()
 			clearTimeout(this.timeout)
 			this.timeout = null
 		}
-		if ( this.endCallback ) {
-			const callback = this.endCallback
+		const cb = this.endCallback
+		if (cb) {
+			this.notifyEnd()
 			this.endCallback = null
-			if ( callback ) callback(this)
+			cb(canceled)
 		}
 	}
 
